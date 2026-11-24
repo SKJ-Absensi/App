@@ -471,11 +471,27 @@
 
         .badge-status-pill {
             display: inline-block;
-            padding: 4px 11px;
+            padding: 5px 13px;
             border-radius: 999px;
             font-size: 11px;
             font-weight: 700;
+            letter-spacing: 0.2px;
             white-space: nowrap;
+        }
+        .badge-ket-sukses {
+            background: rgba(74, 222, 128, 0.15);
+            color: #86efac;
+            border: 1px solid rgba(74, 222, 128, 0.45);
+        }
+        .badge-ket-terlambat {
+            background: rgba(251, 146, 60, 0.18);
+            color: #fdba74;
+            border: 1px solid rgba(251, 146, 60, 0.5);
+        }
+        .badge-ket-absen {
+            background: rgba(248, 113, 113, 0.18);
+            color: #fca5a5;
+            border: 1px solid rgba(248, 113, 113, 0.5);
         }
         .badge-ket-sukses { background: rgba(74, 222, 128, 0.14); color: #86efac; border: 1px solid rgba(74, 222, 128, 0.4); }
         .badge-ket-terlambat { background: rgba(251, 146, 60, 0.16); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.45); }
@@ -1216,14 +1232,13 @@
                         }
                     }
 
-                    html += `<` + tag + `>` + cellContent + `</` + tag + `>`;
+                    html += `<${tag}>${cellContent}</${tag}>`;
                 });
                 html += '</tr>';
             });
             html += '</table>';
             container.innerHTML = html;
         }
-
         function filterTabelLog() {
             const keyword = document.getElementById('searchLog').value.toLowerCase();
             if (rawLogData.length === 0) return;
