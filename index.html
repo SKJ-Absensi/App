@@ -1211,16 +1211,14 @@
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                    if (idx > 0 && colIdx === 6 && cellContent !== '') {
-                        let upper = cellContent.toUpperCase();
-                        let statusClass = "badge-ket-sukses";
-                        if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
-                            statusClass = "badge-ket-terlambat";
-                        } else if (upper.includes("TIDAK") || upper.includes("PULANG ❌") || upper.includes("❌")) {
-                            statusClass = "badge-ket-absen";
-                        }
-                        cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
-                    }
+                   if (idx > 0 && colIdx === 6 && cellContent !== '') {
+    let upper = cellContent.toUpperCase();
+    let statusClass = "badge-ket-sukses";
+    if (upper.includes("TERLAMBAT") || upper.includes("TLT") || upper.includes("❌")) {
+        statusClass = "badge-ket-absen";
+    }
+    cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
+}
 
                     if (idx > 0 && colIdx === 5 && cellContent !== '') {
                         let match = cellContent.match(/[-\w]{25,}/);
