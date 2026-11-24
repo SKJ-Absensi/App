@@ -493,9 +493,6 @@
             color: #fca5a5;
             border: 1px solid rgba(248, 113, 113, 0.5);
         }
-        .badge-ket-sukses { background: rgba(74, 222, 128, 0.14); color: #86efac; border: 1px solid rgba(74, 222, 128, 0.4); }
-        .badge-ket-terlambat { background: rgba(251, 146, 60, 0.16); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.45); }
-        .badge-ket-absen { background: rgba(248, 113, 113, 0.16); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.45); }
 
         .footer {
             text-align: center;
@@ -627,6 +624,17 @@
         </div>
 
         <div class="footer">© Nasi Padang SKJ</div>
+    </div>
+
+    <div id="fotoPreviewModal" onclick="tutupPreviewFoto(event)" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(9,9,11,0.9); backdrop-filter:blur(8px); display:none; align-items:center; justify-content:center; z-index:100000; padding:20px;">
+        <div onclick="event.stopPropagation()" style="background:#141417; border:1px solid rgba(250,204,21,0.45); border-radius:20px; max-width:420px; width:100%; padding:18px; text-align:center; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                <span id="previewFotoJudul" style="font-size:14px; font-weight:800; color:#facc15;">📸 Foto Selfie</span>
+                <button onclick="tutupPreviewFoto()" style="background:#27272a; color:#f4f4f5; border:1px solid #3f3f46; border-radius:999px; width:30px; height:30px; font-weight:bold; cursor:pointer;">✕</button>
+            </div>
+            <img id="previewFotoImg" src="" alt="Preview Selfie" style="width:100%; max-height:65vh; object-fit:contain; border-radius:14px; border:1px solid #27272a; background:#09090b;">
+            <p id="previewFotoCaption" style="font-size:12px; color:#d4d4d8; margin-top:10px;"></p>
+        </div>
     </div>
 
     <script>
@@ -1211,22 +1219,28 @@
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                   if (idx > 0 && colIdx === 6 && cellContent !== '') {
-    let upper = cellContent.toUpperCase();
-    let statusClass = "badge-ket-sukses";
-    if (upper.includes("TERLAMBAT") || upper.includes("TLT") || upper.includes("❌")) {
-        statusClass = "badge-ket-absen";
-    }
-    cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
-}
+                    if (idx > 0 && colIdx === 6 && cellContent !== '') {
+                        let upper = cellContent.toUpperCase();
+                        let statusClass = "badge-ket-sukses";
+                        if (upper.includes("TERLAMBAT") || upper.includes("TLT") || upper.includes("❌")) {
+                            statusClass = "badge-ket-absen";
+                        }
+                        cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
+                    }
 
                     if (idx > 0 && colIdx === 5 && cellContent !== '') {
+                        let namaKaryawanBaris = String(row[1] || "").replace(/<[^>]*>/g, "").trim();
+                        let jamMasukBaris = String(row[2] || "").replace(/<[^>]*>/g, "").trim();
+                        let lokasiBaris = String(row[4] || "").replace(/<[^>]*>/g, "").trim();
+                        let captionText = `${namaKaryawanBaris} • Masuk ${jamMasukBaris} • ${lokasiBaris}`;
+
                         let match = cellContent.match(/[-\w]{25,}/);
-                        if (match) {
-                            let imgUrl = "https://lh3.googleusercontent.com/d/" + match[0];
-                            cellContent = `<a href="${cellContent}" target="_blank"><img src="${imgUrl}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid #facc15;" title="Klik untuk lihat foto asli"></a>`;
-                        } else if (cellContent.startsWith("http")) {
-                            cellContent = `<a href="${cellContent}" target="_blank" style="color:#facc15; text-decoration:underline;">Lihat Foto</a>`;
+                        let imgUrl = match
+                            ? "https://lh3.googleusercontent.com/d/" + match[0]
+                            : (cellContent.startsWith("http") ? cellContent : "");
+
+                        if (imgUrl !== "") {
+                            cellContent = `<img src="${imgUrl}" onclick="bukaPreviewFoto('${imgUrl}', '${namaKaryawanBaris.replace(/'/g, "\\'")}', '${captionText.replace(/'/g, "\\'")}')" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid #facc15; cursor:pointer;" title="Klik untuk melihat foto">`;
                         }
                     }
 
@@ -1237,6 +1251,21 @@
             html += '</table>';
             container.innerHTML = html;
         }
+
+        function bukaPreviewFoto(url, judul, caption) {
+            document.getElementById("previewFotoJudul").innerText = "📸 " + (judul || "Foto Selfie");
+            document.getElementById("previewFotoImg").src = url;
+            document.getElementById("previewFotoCaption").innerText = caption || "";
+            document.getElementById("fotoPreviewModal").style.display = "flex";
+        }
+
+        function tutupPreviewFoto(event) {
+            if (!event || event.target.id === "fotoPreviewModal") {
+                document.getElementById("fotoPreviewModal").style.display = "none";
+                document.getElementById("previewFotoImg").src = "";
+            }
+        }
+
         function filterTabelLog() {
             const keyword = document.getElementById('searchLog').value.toLowerCase();
             if (rawLogData.length === 0) return;
