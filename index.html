@@ -217,8 +217,6 @@
         .badge-off { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }        
         .badge-cuti { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }      
         .badge-tlt { background: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }        
-        .badge-jmlon { background: #f0f9ff; color: #0284c7; border: 1px solid #e0f2fe; font-weight: 700; padding: 3px 6px; font-size: 10.5px; }
-        .badge-uangmakan { background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7; font-weight: 700; padding: 3px 6px; font-size: 10.5px; }
 
         .badge-log-cell {
             display: inline-block;
@@ -303,10 +301,9 @@
         <div id="absensiPage" class="tab-page active-page">
             <div id="tanggal" class="tanggal">Memuat tanggal...</div>
             <div id="jam" class="jam">00:00:00</div>
-<!-- INFORMASI / MARQUEE -->
             <div style="background: #eff6ff; color: #1e40af; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #dbeafe; font-size: 13px; font-weight: 600;">
                 <marquee behavior="scroll" direction="left">
-                    📢 <b>Informasi:</b> Selamat datang di Absensi QR SKJ. jika respon Absensi Error cukup Lakukan refresh ya, tarik k bawah halaman Absensinya!
+                    📢 <b>Informasi:</b> Selamat datang di Absensi QR SKJ. Jika respon Absensi Error cukup lakukan refresh, tarik ke bawah halaman Absensinya!
                 </marquee>
             </div>
             <div id="pilihanLokasi">
@@ -358,7 +355,8 @@
     </div>
 
     <script>
-        const API = "https://script.google.com/macros/s/AKfycbyokn5uN2NyiHanuwjafc158puU5B6SMR2HBWu2sCsM1e5k4VGwv_8oLuwJtg1_wpF9/exec";
+        // GANTI DENGAN URL WEB APP TERBARU DARI DEPLOYMENT APPS SCRIPT SKJ
+        const API = "https://script.google.com/macros/s/AKfycbwfGum0yWFlBtcOsuJMWs837H6krq6QmmXx1cCkhDOdjfTsSL2bQaTSvc1kBzImw3yCHg/exec";
 
         const namaBulanArr = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         let selectedLokasi = "";
@@ -493,11 +491,9 @@
                 overlay.style.display = "none";
 
                 if (res.tipeAbsen === "PULANG") {
-                    // ABSEN PULANG: Langsung simpan tanpa selfie (sesuai permintaan)
                     isSubmitting = false;
                     prosesAbsenLangsung(idStaff, "", selectedLokasi);
                 } else {
-                    // ABSEN MASUK: Membuka kamera selfie
                     isSubmitting = false;
                     document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
                     const modal = document.getElementById("selfieModal");
@@ -821,26 +817,11 @@
                     let tag = idx === 0 || idx === 1 ? 'th' : 'td';
                     let cellText = cell !== null ? String(cell).trim() : '';
 
-                    if (idx >= 2 && (colIdx === 1 || colIdx >= row.length - 3) && cellText !== '') {
-                        cellText = `<span class="badge-log-cell">${cellText}</span>`;
-                    }
-
                     if (idx >= 2 && colIdx > 1 && cellText !== '') {
                         let upperVal = cellText.toUpperCase();
                         let badgeClass = "";
                         
-                        const isJmlOn = colIdx === row.length - 2;
-                        const isUangMakan = colIdx === row.length - 1;
-
-                        if (isJmlOn) {
-                            badgeClass = "badge-shift badge-jmlon";
-                        } else if (isUangMakan) {
-                            badgeClass = "badge-shift badge-uangmakan";
-                            let num = Number(cellText.replace(/[^0-9]/g, ''));
-                            if (!isNaN(num) && num > 0) {
-                                cellText = "Rp " + num.toLocaleString('id-ID');
-                            }
-                        } else if (upperVal === "S1") badgeClass = "badge-shift badge-s1";
+                        if (upperVal === "S1") badgeClass = "badge-shift badge-s1";
                         else if (upperVal === "S2") badgeClass = "badge-shift badge-s2";
                         else if (upperVal === "OFF" || upperVal === "LIBUR") badgeClass = "badge-shift badge-off";
                         else if (upperVal.includes("CUTI")) badgeClass = "badge-shift badge-cuti";
