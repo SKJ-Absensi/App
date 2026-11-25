@@ -244,7 +244,7 @@
             display: none; flex-direction: column; align-items: center; justify-content: center;
             z-index: 99999; padding: 20px; text-align: center; opacity: 0; transition: opacity 0.3s ease;
         }
-        
+
         .overlay-card {
             background: #141417; width: 100%; max-width: 440px; padding: 34px 24px 28px 24px; border-radius: 28px;
             display: flex; flex-direction: column; align-items: center; position: relative;
@@ -269,7 +269,7 @@
         #fullScreenOverlay.theme-loading .overlay-name-badge { background: #1f1f24; color: #fde047; border: 1px solid rgba(250, 204, 21, 0.35); }
         #fullScreenOverlay.theme-loading .overlay-msg-box { background: #18181b; color: #d4d4d8; border: 1px solid #27272a; }
         #fullScreenOverlay.theme-loading .spinner-ring { border: 5px solid rgba(250, 204, 21, 0.18); border-top: 5px solid #facc15; }
-        
+
         #fullScreenOverlay.theme-masuk { background: rgba(9, 9, 11, 0.88); }
         #fullScreenOverlay.theme-masuk .overlay-card { background: linear-gradient(180deg, #241e06 0%, #141417 100%); border-top: 6px solid #facc15; }
         #fullScreenOverlay.theme-masuk .overlay-badge-icon { background: #facc15; color: #09090b; }
@@ -297,7 +297,7 @@
         .overlay-subtitle { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
         .overlay-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.3px; }
         .overlay-name-badge { font-size: 19px; font-weight: 700; margin: 6px 0 14px 0; padding: 12px 18px; border-radius: 16px; width: 100%; word-break: break-word; }
-        
+
         .overlay-info-grid { display: flex; flex-direction: column; width: 100%; gap: 8px; margin-bottom: 16px; }
         .overlay-info-item { display: flex; align-items: center; justify-content: space-between; background: #18181b; padding: 10px 14px; border-radius: 12px; border: 1px solid #27272a; font-size: 13px; font-weight: 600; color: #d4d4d8; }
         .overlay-info-item span:last-child { color: #facc15; font-weight: 700; }
@@ -316,18 +316,18 @@
             z-index: 9999; padding: 20px; color: white; text-align: center;
         }
         #selfieVideo { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 1; background: #000; }
-        
-        .selfie-header { 
+
+        .selfie-header {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 2; width: 90%; max-width: 420px; background: rgba(9, 9, 11, 0.88); 
-            padding: 12px 16px; border-radius: 16px; backdrop-filter: blur(12px); 
-            border: 1px solid rgba(250, 204, 21, 0.45); 
+            z-index: 2; width: 90%; max-width: 420px; background: rgba(9, 9, 11, 0.88);
+            padding: 12px 16px; border-radius: 16px; backdrop-filter: blur(12px);
+            border: 1px solid rgba(250, 204, 21, 0.45);
         }
 
-        .selfie-footer { 
-            position: relative; z-index: 2; width: 100%; max-width: 420px; 
-            background: rgba(9, 9, 11, 0.88); padding: 16px; border-radius: 18px; 
-            backdrop-filter: blur(12px); border: 1px solid rgba(250, 204, 21, 0.45); 
+        .selfie-footer {
+            position: relative; z-index: 2; width: 100%; max-width: 420px;
+            background: rgba(9, 9, 11, 0.88); padding: 16px; border-radius: 18px;
+            backdrop-filter: blur(12px); border: 1px solid rgba(250, 204, 21, 0.45);
             margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.65);
         }
 
@@ -367,8 +367,8 @@
             white-space: nowrap;
             table-layout: auto;
         }
-        
-        #jadwalContent table.rekap-table th, 
+
+        #jadwalContent table.rekap-table th,
         #jadwalContent table.rekap-table td {
             border: 1px solid #252730;
             padding: 7px 9px;
@@ -377,7 +377,7 @@
             vertical-align: middle;
         }
 
-        #logContent table.rekap-table th, 
+        #logContent table.rekap-table th,
         #logContent table.rekap-table td {
             border: 1px solid #252730;
             padding: 10px 12px;
@@ -385,7 +385,7 @@
             color: #e4e4e7;
             vertical-align: middle;
         }
-        
+
         #jadwalContent table.rekap-table th {
             background: #09090b !important;
             color: #facc15 !important;
@@ -409,19 +409,19 @@
             border-bottom: 1px solid rgba(250, 204, 21, 0.35);
         }
 
-        table.rekap-table th:first-child, 
-        table.rekap-table td:first-child { 
-            width: 42px !important; 
-            min-width: 42px !important; 
-            max-width: 42px !important; 
-            background: #15161b; 
-            border-right: 1px solid #252730; 
+        table.rekap-table th:first-child,
+        table.rekap-table td:first-child {
+            width: 42px !important;
+            min-width: 42px !important;
+            max-width: 42px !important;
+            background: #15161b;
+            border-right: 1px solid #252730;
             text-align: center;
             color: #a1a1aa;
         }
 
-        table.rekap-table th:nth-child(2), 
-        table.rekap-table td:nth-child(2) { 
+        table.rekap-table th:nth-child(2),
+        table.rekap-table td:nth-child(2) {
             position: sticky !important;
             left: 0 !important;
             min-width: 125px;
@@ -436,11 +436,11 @@
         }
 
         #jadwalContent table.rekap-table tr:not(:first-child):not(:nth-child(2)) td:nth-child(2),
-        #logContent table.rekap-table tr:not(:first-child) td:nth-child(2) { 
-            background: #17181e !important; 
+        #logContent table.rekap-table tr:not(:first-child) td:nth-child(2) {
+            background: #17181e !important;
             color: #fde047 !important;
-            font-weight: 700; 
-            border-right: 2px solid rgba(250, 204, 21, 0.35); 
+            font-weight: 700;
+            border-right: 2px solid rgba(250, 204, 21, 0.35);
             z-index: 10;
         }
 
@@ -456,14 +456,14 @@
         .shift-text-s1 { color: #fde68a; font-weight: 600; font-size: 11px; }
         .shift-text-s2 { color: #facc15; font-weight: 700; font-size: 11px; }
 
-        .badge-shift { 
-            display: inline-block; 
-            padding: 3px 8px; 
-            border-radius: 999px; 
-            font-weight: 700; 
-            font-size: 10.5px; 
-            text-align: center; 
-            min-width: 34px; 
+        .badge-shift {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 10.5px;
+            text-align: center;
+            min-width: 34px;
         }
         .badge-off { background: rgba(248, 113, 113, 0.16); color: #fca5a5; border: 1px solid rgba(248, 113, 113, 0.45); }
         .badge-cuti { background: rgba(96, 165, 250, 0.16); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.45); }
@@ -534,7 +534,7 @@
             <div class="overlay-subtitle" id="overlaySubtitle">NASI PADANG SKJ</div>
             <div class="overlay-title" id="overlayTitle">Memproses Absen</div>
             <div class="overlay-name-badge" id="overlayName">Mohon Tunggu</div>
-            
+
             <div class="overlay-info-grid" id="overlayInfoGrid" style="display:none;">
                 <div class="overlay-info-item">
                     <span>📍 Lokasi Absen</span>
@@ -554,7 +554,7 @@
 
     <div class="container">
         <div class="welcomeCard">
-            <img src="icon-192.png" class="welcomeLogo" alt="Logo SKJ" onerror="this.onerror=null;this.src='icon-512.jpg';">
+            <img src="icon-192.png" class="welcomeLogo" alt="Logo SKJ" onerror="this.onerror=null;this.src='icon-512.png';">
             <h2>ABSENSI QR SKJ</h2>
             <div class="welcomeSubtitle">Nasi Padang SKJ • Sistem Kehadiran Digital</div>
         </div>
@@ -571,7 +571,7 @@
 
             <div class="info-banner">
                 <marquee behavior="scroll" direction="left">
-                    📢 <b>Informasi:</b> Selamat datang di Absensi QR Nasi Padang SKJ Bro and Sis. - Rabu, sabtu dan minggu tidak boleh Libur ( cuti ) - | Cuti 2 kali dalam satu bulan |  
+                    📢 <b>Informasi:</b> Selamat datang di Absensi QR Nasi Padang SKJ Bro and Sis. - Rabu, sabtu dan minggu tidak boleh Libur ( cuti ) - | Cuti 2 kali dalam satu bulan |
                 </marquee>
             </div>
 
@@ -644,7 +644,7 @@
         let selectedLokasi = "";
         let html5QrCode = null;
         let sedangProses = false;
-        let isSubmitting = false; 
+        let isSubmitting = false;
         let activeStaffId = "";
         let activeStaffName = "";
         let streamSelfie = null;
@@ -652,14 +652,103 @@
         let rawJadwalData = [];
         let rawLogData = [];
 
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        function pilihSuaraPerempuanIndonesia() {
+            if (!('speechSynthesis' in window)) return null;
+            const voices = window.speechSynthesis.getVoices() || [];
+            if (voices.length === 0) return null;
+
+            const idVoices = voices.filter(v => (v.lang || "").toLowerCase().startsWith("id"));
+            const femaleKeywords = ["female", "wanita", "perempuan", "gadis", "damayanti", "ayu", "siti", "google indonesia"];
+
+            for (const v of idVoices) {
+                const namaV = (v.name || "").toLowerCase();
+                if (femaleKeywords.some(k => namaV.includes(k))) {
+                    return v;
+                }
+            }
+
+            if (idVoices.length > 0) return idVoices[0];
+            return null;
+        }
+
+        function playAnnouncementChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                // Nada pembuka lembut 2-tone ala pengumuman bandara
+                const notes = [
+                    { freq: 880, delay: 0.0, dur: 0.28, vol: 0.14 },
+                    { freq: 1174.66, delay: 0.22, dur: 0.45, vol: 0.16 }
+                ];
+
+                notes.forEach(n => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(n.freq, audioCtx.currentTime + n.delay);
+                    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + n.delay);
+                    gain.gain.exponentialRampToValueAtTime(n.vol, audioCtx.currentTime + n.delay + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + n.delay + n.dur);
+                    osc.start(audioCtx.currentTime + n.delay);
+                    osc.stop(audioCtx.currentTime + n.delay + n.dur + 0.02);
+                });
+            } catch (e) {}
+        }
+
+        function ucapkanPengumumanBandara(tipeAbsen, namaStaff = "") {
+            playAnnouncementChime();
+
+            if (!('speechSynthesis' in window)) return;
+
+            const namaBersih = String(namaStaff || "").trim();
+            const sapaanNama = namaBersih ? `atas nama ${namaBersih}, ` : "";
+            const isPulang = String(tipeAbsen || "").toUpperCase() === "PULANG";
+
+            const kalimat = isPulang
+                ? `Perhatian. Absen pulang ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Terima kasih atas kerja keras Anda hari ini, dan hati-hati di jalan.`
+                : `Perhatian. Absen masuk ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Selamat bertugas, semoga hari Anda lancar dan berkah.`;
+
+            try {
+                window.speechSynthesis.cancel();
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(kalimat);
+                    const suaraWanitaId = pilihSuaraPerempuanIndonesia();
+                    if (suaraWanitaId) {
+                        utterance.voice = suaraWanitaId;
+                        utterance.lang = suaraWanitaId.lang || 'id-ID';
+                    } else {
+                        utterance.lang = 'id-ID';
+                    }
+                    // Tempo sedikit lebih santai & pitch agak naik agar terdengar ramah ala CS bandara
+                    utterance.rate = 0.92;
+                    utterance.pitch = 1.18;
+                    utterance.volume = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }, 550);
+            } catch (e) {}
+        }
+
         function updateClock(){
             const now = new Date();
             const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const tanggalStr = hari[now.getDay()] + ", " + now.getDate() + " " + namaBulanArr[now.getMonth()] + " " + now.getFullYear();
-            
+
             document.getElementById("tanggal").innerText = tanggalStr;
             document.getElementById("jam").innerText = now.toLocaleTimeString("id-ID");
-            
+
             const logDateEl = document.getElementById("logCurrentDate");
             if (logDateEl) {
                 logDateEl.innerText = "📅 " + tanggalStr + " | ⏰ " + now.toLocaleTimeString("id-ID") + " WIB";
@@ -671,7 +760,7 @@
         function switchTab(tabName, btn) {
             document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active-page'));
             document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
-            
+
             if(tabName === 'absensi') {
                 document.getElementById('absensiPage').classList.add('active-page');
             } else if(tabName === 'jadwal') {
@@ -687,7 +776,7 @@
         function pilihLokasi(lokasi) {
             const btnLokasi = document.querySelectorAll('.btnLokasi');
             btnLokasi.forEach(btn => btn.disabled = true);
-            
+
             selectedLokasi = lokasi;
             document.getElementById('lokasiAktifText').innerText = lokasi;
             document.getElementById('pilihanLokasi').style.display = 'none';
@@ -732,7 +821,7 @@
                 (decodedText) => {
                     if (sedangProses) return;
                     sedangProses = true;
-                    
+
                     html5QrCode.stop().then(() => {
                         prosesQRData(decodedText);
                     }).catch(err => {
@@ -807,8 +896,6 @@
                     const nowWib = new Date();
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
                     const overlay = document.getElementById("fullScreenOverlay");
-                    
-                    playTringBellSound();
 
                     document.getElementById("overlayLoaderContainer").style.display = "none";
                     document.getElementById("overlayIcon").style.display = "flex";
@@ -823,18 +910,11 @@
 
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = tglFormat;
-                    
+
                     overlay.style.display = "flex";
                     setTimeout(() => { overlay.classList.add("show"); }, 10);
 
-                    if ('speechSynthesis' in window) {
-                        window.speechSynthesis.cancel();
-                        setTimeout(() => {
-                            const utterance = new SpeechSynthesisUtterance("Absen Pulang Berhasil");
-                            utterance.lang = 'id-ID';
-                            window.speechSynthesis.speak(utterance);
-                        }, 400);
-                    }
+                    ucapkanPengumumanBandara("PULANG", res.nama);
 
                     setTimeout(() => {
                         overlay.classList.remove("show");
@@ -872,12 +952,12 @@
         }
 
         function ambilFotoDanKirim() {
-            if (isSubmitting) return; 
+            if (isSubmitting) return;
             isSubmitting = true;
 
             const video = document.getElementById("selfieVideo");
             const canvas = document.getElementById("canvas");
-            
+
             if (video.videoWidth === 0 || video.videoHeight === 0) {
                 alert("Kamera sedang bersiap, silakan ketuk tombol ambil foto sekali lagi.");
                 isSubmitting = false;
@@ -898,7 +978,7 @@
 
             const nowWib = new Date();
             const tglStr = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " - " + nowWib.toLocaleTimeString("id-ID");
-            
+
             ctx.fillStyle = "rgba(9, 9, 11, 0.75)";
             ctx.fillRect(0, canvas.height - 72, canvas.width, 72);
             ctx.font = "bold 15px Arial";
@@ -928,52 +1008,41 @@
                 btn.disabled = false;
                 btn.innerHTML = "<span>📸</span> Ambil Foto &amp; Kirim Absen";
                 isSubmitting = false;
-                
+
                 if (res.status) {
                     const tglFormat = nowWib.getDate() + " " + namaBulanArr[nowWib.getMonth()] + " " + nowWib.getFullYear() + " | " + nowWib.toLocaleTimeString("id-ID");
                     const overlay = document.getElementById("fullScreenOverlay");
-                    
-                    playTringBellSound();
 
-                    let teksUcapkan = "";
-                    
+                    let tipeFinal = "MASUK";
+
                     document.getElementById("overlayLoaderContainer").style.display = "none";
                     document.getElementById("overlayIcon").style.display = "flex";
                     document.getElementById("overlayInfoGrid").style.display = "flex";
                     document.getElementById("overlayInfoLokasi").innerText = selectedLokasi + " (Nasi Padang SKJ)";
 
                     if (res.statusAbsen && res.statusAbsen.toUpperCase() === "PULANG") {
+                        tipeFinal = "PULANG";
                         overlay.className = "theme-pulang";
                         document.getElementById("overlayIcon").innerText = "🏡";
                         document.getElementById("overlaySubtitle").innerText = "ABSEN PULANG SUKSES";
                         document.getElementById("overlayTitle").innerText = "Hati-Hati di Jalan!";
                         document.getElementById("overlayMsg").innerHTML = `Selamat beristirahat, terima kasih atas kerjanya hari ini! <span class="waving-hand">👋</span>`;
-                        teksUcapkan = "Absen Pulang Berhasil";
                     } else {
+                        tipeFinal = "MASUK";
                         overlay.className = "theme-masuk";
                         document.getElementById("overlayIcon").innerText = "🍽️";
                         document.getElementById("overlaySubtitle").innerText = "ABSEN MASUK SUKSES";
                         document.getElementById("overlayTitle").innerText = "Selamat Bekerja!";
                         document.getElementById("overlayMsg").innerHTML = `Semoga harinya lancar, berkah, dan penuh semangat! <span class="waving-hand">👋</span>`;
-                        teksUcapkan = "Absen Masuk Berhasil";
                     }
 
                     document.getElementById("overlayName").innerText = res.nama;
                     document.getElementById("overlayTime").innerText = tglFormat;
-                    
+
                     overlay.style.display = "flex";
                     setTimeout(() => { overlay.classList.add("show"); }, 10);
 
-                    if ('speechSynthesis' in window) {
-                        window.speechSynthesis.cancel();
-                        setTimeout(() => {
-                            const utterance = new SpeechSynthesisUtterance(teksUcapkan);
-                            utterance.lang = 'id-ID';
-                            utterance.rate = 1.0;
-                            utterance.pitch = 1.1;
-                            window.speechSynthesis.speak(utterance);
-                        }, 400);
-                    }
+                    ucapkanPengumumanBandara(tipeFinal, res.nama);
 
                     setTimeout(() => {
                         overlay.classList.remove("show");
@@ -981,7 +1050,7 @@
                             overlay.style.display = "none";
                             const btnLokasi = document.querySelectorAll('.btnLokasi');
                             btnLokasi.forEach(b => b.disabled = false);
-                            
+
                             mulaiScanner();
                         }, 350);
                     }, 6500);
@@ -995,27 +1064,6 @@
                 btn.innerHTML = "<span>📸</span> Ambil Foto &amp; Kirim Absen";
                 tampilkanPesanError("Koneksi jaringan terganggu saat mengirim absen. Silakan coba lagi.");
             });
-        }
-
-        function playTringBellSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                function playTone(freq, delay, duration, vol) {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
-                    gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + delay + duration);
-                    osc.start(audioCtx.currentTime + delay);
-                    osc.stop(audioCtx.currentTime + delay + duration);
-                }
-                playTone(1318.51, 0.0, 0.6, 0.25);
-                playTone(2093.00, 0.08, 0.8, 0.3);
-                playTone(2637.02, 0.15, 1.0, 0.2);
-            } catch(e) {}
         }
 
         function tampilkanLoading(judul, sub) {
@@ -1073,7 +1121,7 @@
             document.getElementById("overlayTitle").innerText = judulUtama;
             document.getElementById("overlayName").innerText = labelBadge;
             document.getElementById("overlayMsg").innerText = teksPesan || "Silakan periksa kembali QR atau hubungi admin Kedai SKJ.";
-            
+
             overlay.style.display = "flex";
             setTimeout(() => { overlay.classList.add("show"); }, 10);
 
@@ -1116,7 +1164,7 @@
             const container = document.getElementById('jadwalContent');
             let html = `<div style="font-weight: 700; font-size: 13px; color: #facc15; margin-bottom: 10px; text-align: center;">📅 Periode: ${namaSheet}</div>`;
             html += '<table class="rekap-table" id="tabelJadwalIsi">';
-            
+
             rows.forEach((row, idx) => {
                 html += '<tr>';
                 row.forEach((cell, colIdx) => {
@@ -1176,7 +1224,7 @@
                     container.innerHTML = `<div style='text-align:center; padding:20px; color:#fde047;'>${res.pesan}</div>`;
                     return;
                 }
-                
+
                 let originalRows = res.data;
                 if (!originalRows || originalRows.length <= 1) {
                     container.innerHTML = "<div style='text-align:center; padding:20px; color:#a1a1aa;'>Belum ada karyawan yang absen hari ini.</div>";
@@ -1190,9 +1238,9 @@
                     let lokasi = row[5] || "-";
                     let foto = row[6] || "";
                     let hasil = row[8] || "-";
-                    
+
                     let newRow = [namaStaff, masuk, pulang, lokasi, foto, hasil];
-                    
+
                     if (index === 0) {
                         newRow.unshift("No");
                         newRow[1] = "Nama Staff";
