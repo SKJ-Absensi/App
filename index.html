@@ -648,96 +648,115 @@
         let activeStaffId = "";
         let activeStaffName = "";
         let streamSelfie = null;
+        let audioCtxShared = null;
 
         let rawJadwalData = [];
         let rawLogData = [];
 
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.getVoices();
-            window.speechSynthesis.onvoiceschanged = () => {
+            try {
                 window.speechSynthesis.getVoices();
-            };
+                window.speechSynthesis.onvoiceschanged = () => {
+                    try { window.speechSynthesis.getVoices(); } catch (e) {}
+                };
+            } catch (e) {}
+        }
+
+        function siapkanAudioPadaGestur() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) {
+                    if (!audioCtxShared) {
+                        audioCtxShared = new AudioCtx();
+                    }
+                    if (audioCtxShared.state === 'suspended') {
+                        audioCtxShared.resume().catch(() => {});
+                    }
+                }
+            } catch (e) {}
         }
 
         function pilihSuaraPerempuanIndonesia() {
-            if (!('speechSynthesis' in window)) return null;
-            const voices = window.speechSynthesis.getVoices() || [];
-            if (voices.length === 0) return null;
+            try {
+                if (!('speechSynthesis' in window)) return null;
+                const voices = window.speechSynthesis.getVoices() || [];
+                if (voices.length === 0) return null;
 
-            const idVoices = voices.filter(v => (v.lang || "").toLowerCase().startsWith("id"));
-            const femaleKeywords = ["female", "wanita", "perempuan", "gadis", "damayanti", "ayu", "siti", "google indonesia"];
+                const idVoices = voices.filter(v => (v.lang || "").toLowerCase().startsWith("id"));
+                const femaleKeywords = ["female", "wanita", "perempuan", "gadis", "damayanti", "ayu", "siti", "google indonesia"];
 
-            for (const v of idVoices) {
-                const namaV = (v.name || "").toLowerCase();
-                if (femaleKeywords.some(k => namaV.includes(k))) {
-                    return v;
+                for (const v of idVoices) {
+                    const namaV = (v.name || "").toLowerCase();
+                    if (femaleKeywords.some(k => namaV.includes(k))) {
+                        return v;
+                    }
                 }
-            }
 
-            if (idVoices.length > 0) return idVoices[0];
-            return null;
+                if (idVoices.length > 0) return idVoices[0];
+                return null;
+            } catch (e) {
+                return null;
+            }
         }
 
         function playAnnouncementChime() {
             try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                const audioCtx = new AudioCtx();
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
+                siapkanAudioPadaGestur();
+                if (!audioCtxShared) return;
 
-                // Nada pembuka lembut 2-tone ala pengumuman bandara
+                const now = audioCtxShared.currentTime;
                 const notes = [
-                    { freq: 880, delay: 0.0, dur: 0.28, vol: 0.14 },
-                    { freq: 1174.66, delay: 0.22, dur: 0.45, vol: 0.16 }
+                    { freq: 880, delay: 0.0, dur: 0.25, vol: 0.12 },
+                    { freq: 1174.66, delay: 0.2, dur: 0.4, vol: 0.14 }
                 ];
 
                 notes.forEach(n => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
+                    const osc = audioCtxShared.createOscillator();
+                    const gain = audioCtxShared.createGain();
                     osc.connect(gain);
-                    gain.connect(audioCtx.destination);
+                    gain.connect(audioCtxShared.destination);
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(n.freq, audioCtx.currentTime + n.delay);
-                    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + n.delay);
-                    gain.gain.exponentialRampToValueAtTime(n.vol, audioCtx.currentTime + n.delay + 0.03);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + n.delay + n.dur);
-                    osc.start(audioCtx.currentTime + n.delay);
-                    osc.stop(audioCtx.currentTime + n.delay + n.dur + 0.02);
+                    osc.frequency.setValueAtTime(n.freq, now + n.delay);
+                    gain.gain.setValueAtTime(0.0001, now + n.delay);
+                    gain.gain.exponentialRampToValueAtTime(n.vol, now + n.delay + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + n.delay + n.dur);
+                    osc.start(now + n.delay);
+                    osc.stop(now + n.delay + n.dur + 0.02);
                 });
             } catch (e) {}
         }
 
         function ucapkanPengumumanBandara(tipeAbsen, namaStaff = "") {
-            playAnnouncementChime();
-
-            if (!('speechSynthesis' in window)) return;
-
-            const namaBersih = String(namaStaff || "").trim();
-            const sapaanNama = namaBersih ? `atas nama ${namaBersih}, ` : "";
-            const isPulang = String(tipeAbsen || "").toUpperCase() === "PULANG";
-
-            const kalimat = isPulang
-                ? `Perhatian. Absen pulang ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Terima kasih atas kerja keras Anda hari ini, dan hati-hati di jalan.`
-                : `Perhatian. Absen masuk ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Selamat bertugas, semoga hari Anda lancar dan berkah.`;
-
             try {
+                playAnnouncementChime();
+
+                if (!('speechSynthesis' in window)) return;
+
+                const namaBersih = String(namaStaff || "").trim();
+                const sapaanNama = namaBersih ? `atas nama ${namaBersih}, ` : "";
+                const isPulang = String(tipeAbsen || "").toUpperCase() === "PULANG";
+
+                const kalimat = isPulang
+                    ? `Perhatian. Absen pulang ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Terima kasih atas kerja keras Anda hari ini, dan hati-hati di jalan.`
+                    : `Perhatian. Absen masuk ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Selamat bertugas, semoga hari Anda lancar dan berkah.`;
+
                 window.speechSynthesis.cancel();
                 setTimeout(() => {
-                    const utterance = new SpeechSynthesisUtterance(kalimat);
-                    const suaraWanitaId = pilihSuaraPerempuanIndonesia();
-                    if (suaraWanitaId) {
-                        utterance.voice = suaraWanitaId;
-                        utterance.lang = suaraWanitaId.lang || 'id-ID';
-                    } else {
-                        utterance.lang = 'id-ID';
-                    }
-                    // Tempo sedikit lebih santai & pitch agak naik agar terdengar ramah ala CS bandara
-                    utterance.rate = 0.92;
-                    utterance.pitch = 1.18;
-                    utterance.volume = 1.0;
-                    window.speechSynthesis.speak(utterance);
-                }, 550);
+                    try {
+                        const utterance = new SpeechSynthesisUtterance(kalimat);
+                        const suaraWanitaId = pilihSuaraPerempuanIndonesia();
+                        if (suaraWanitaId) {
+                            utterance.voice = suaraWanitaId;
+                            utterance.lang = suaraWanitaId.lang || 'id-ID';
+                        } else {
+                            utterance.lang = 'id-ID';
+                        }
+                        utterance.rate = 0.92;
+                        utterance.pitch = 1.18;
+                        utterance.volume = 1.0;
+                        window.speechSynthesis.speak(utterance);
+                    } catch (e) {}
+                }, 450);
             } catch (e) {}
         }
 
@@ -758,6 +777,7 @@
         updateClock();
 
         function switchTab(tabName, btn) {
+            siapkanAudioPadaGestur();
             document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active-page'));
             document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
 
@@ -774,6 +794,7 @@
         }
 
         function pilihLokasi(lokasi) {
+            siapkanAudioPadaGestur();
             const btnLokasi = document.querySelectorAll('.btnLokasi');
             btnLokasi.forEach(btn => btn.disabled = true);
 
@@ -786,8 +807,14 @@
 
         function gantiLokasi() {
             if (html5QrCode) {
-                html5QrCode.stop().catch(e => {});
+                try {
+                    if (html5QrCode.isScanning) {
+                        html5QrCode.stop().catch(e => {});
+                    }
+                } catch (e) {}
             }
+            sedangProses = false;
+            isSubmitting = false;
             document.getElementById('scannerArea').style.display = 'none';
             document.getElementById('pilihanLokasi').style.display = 'block';
 
@@ -799,59 +826,81 @@
             sedangProses = false;
             isSubmitting = false;
             setTimeout(() => {
-                if (!html5QrCode) {
-                    html5QrCode = new Html5Qrcode("reader");
-                }
-                if (html5QrCode.isScanning) {
-                    html5QrCode.stop().then(() => {
+                try {
+                    if (!html5QrCode) {
+                        html5QrCode = new Html5Qrcode("reader");
+                    }
+                    if (html5QrCode.isScanning) {
+                        html5QrCode.stop().then(() => {
+                            jalankanKameraScanner();
+                        }).catch(() => {
+                            jalankanKameraScanner();
+                        });
+                    } else {
                         jalankanKameraScanner();
-                    }).catch(err => {
-                        jalankanKameraScanner();
-                    });
-                } else {
-                    jalankanKameraScanner();
+                    }
+                } catch (err) {
+                    console.log("Init scanner error:", err);
+                    sedangProses = false;
                 }
-            }, 800);
+            }, 600);
         }
 
         function jalankanKameraScanner() {
+            sedangProses = false;
             html5QrCode.start(
                 { facingMode: "environment" },
                 { fps: 10, qrbox: 230 },
                 (decodedText) => {
-                    if (sedangProses) return;
+                    if (sedangProses || isSubmitting) return;
                     sedangProses = true;
 
-                    html5QrCode.stop().then(() => {
-                        prosesQRData(decodedText);
-                    }).catch(err => {
-                        prosesQRData(decodedText);
-                    });
+                    const cleanId = String(decodedText || "").trim();
+
+                    const lanjutProses = () => {
+                        prosesQRData(cleanId);
+                    };
+
+                    try {
+                        if (html5QrCode && html5QrCode.isScanning) {
+                            html5QrCode.stop().then(lanjutProses).catch(lanjutProses);
+                        } else {
+                            lanjutProses();
+                        }
+                    } catch (e) {
+                        lanjutProses();
+                    }
                 },
                 (err) => {}
             ).catch(err => {
                 console.log("Kamera sibuk:", err);
-                setTimeout(() => { sedangProses = false; }, 2000);
+                sedangProses = false;
             });
         }
 
         function prosesQRData(idStaff) {
             if (isSubmitting) return;
             isSubmitting = true;
-            activeStaffId = idStaff;
+            activeStaffId = String(idStaff || "").trim();
+
+            if (!activeStaffId) {
+                isSubmitting = false;
+                tampilkanPesanError("QR Kosong atau tidak terbaca. Silakan scan ulang.");
+                return;
+            }
 
             tampilkanLoading("MENGECEK QR", "Memeriksa status kehadiran...");
 
             fetch(API, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "cekStatusAbsen", id: idStaff })
+                body: JSON.stringify({ action: "cekStatusAbsen", id: activeStaffId })
             })
             .then(r => r.json())
             .then(res => {
-                if (!res.status) {
+                if (!res || !res.status) {
                     isSubmitting = false;
-                    tampilkanPesanError(res.pesan);
+                    tampilkanPesanError((res && res.pesan) || "QR tidak valid.");
                     return;
                 }
 
@@ -863,7 +912,7 @@
 
                 if (res.tipeAbsen === "PULANG") {
                     isSubmitting = false;
-                    prosesAbsenLangsung(idStaff, "", selectedLokasi);
+                    prosesAbsenLangsung(activeStaffId, "", selectedLokasi);
                 } else {
                     isSubmitting = false;
                     document.getElementById("selfieStaffName").innerText = "👤 " + activeStaffName;
@@ -947,13 +996,13 @@
                     alert("Kamera depan belum dapat diakses untuk selfie.");
                     document.getElementById("selfieModal").style.display = "none";
                     mulaiScanner();
-                    sedangProses = false;
                 });
         }
 
         function ambilFotoDanKirim() {
             if (isSubmitting) return;
             isSubmitting = true;
+            siapkanAudioPadaGestur();
 
             const video = document.getElementById("selfieVideo");
             const canvas = document.getElementById("canvas");
