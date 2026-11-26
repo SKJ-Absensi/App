@@ -653,6 +653,35 @@
         let rawJadwalData = [];
         let rawLogData = [];
 
+        function formatTanggalSingkat(val) {
+            const raw = String(val || "").trim();
+            if (!raw || raw === "-") return "-";
+
+            let d = null;
+            if (raw.includes("T")) {
+                d = new Date(raw);
+            } else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(raw)) {
+                const p = raw.split("/");
+                d = new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]));
+            } else if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(raw)) {
+                const p = raw.split("-");
+                d = new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]));
+            } else if (/^\d{1,2}-\d{1,2}-\d{2}$/.test(raw)) {
+                return raw;
+            } else if (/^\d{4}-\d{1,2}-\d{1,2}/.test(raw)) {
+                const p = raw.substring(0, 10).split("-");
+                d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            }
+
+            if (d && !isNaN(d.getTime())) {
+                const dd = String(d.getDate()).padStart(2, "0");
+                const mm = String(d.getMonth() + 1).padStart(2, "0");
+                const yy = String(d.getFullYear()).slice(-2);
+                return `${dd}-${mm}-${yy}`;
+            }
+            return raw;
+        }
+
         if ('speechSynthesis' in window) {
             try {
                 window.speechSynthesis.getVoices();
@@ -788,6 +817,7 @@
                 loadJadwalKerja();
             } else if(tabName === 'log') {
                 document.getElementById('logPage').classList.add('active-page');
+                document.getElementById('searchLog').value = "";
                 loadLogHarian();
             }
             btn.classList.add('active');
@@ -1280,7 +1310,12 @@
                     return;
                 }
 
+                // Susunan kolom: [No, Nama Staff, Tanggal, MASUK, PULANG, KETERANGAN, FOTO SELFI, Hasil]
                 rawLogData = originalRows.map((row, index) => {
+                    if (index === 0) {
+                        return ["No", "Nama Staff", "Tanggal", "MASUK", "PULANG", "KETERANGAN", "FOTO SELFI", "Hasil"];
+                    }
+                    let tanggalSingkat = formatTanggalSingkat(row[0]);
                     let namaStaff = row[2] || "-";
                     let masuk = row[3] || "-";
                     let pulang = (row[4] && row[4] !== "") ? row[4] : "-";
@@ -1288,16 +1323,7 @@
                     let foto = row[6] || "";
                     let hasil = row[8] || "-";
 
-                    let newRow = [namaStaff, masuk, pulang, lokasi, foto, hasil];
-
-                    if (index === 0) {
-                        newRow.unshift("No");
-                        newRow[1] = "Nama Staff";
-                        newRow[newRow.length - 1] = "Hasil";
-                    } else {
-                        newRow.unshift(index);
-                    }
-                    return newRow;
+                    return [index, namaStaff, tanggalSingkat, masuk, pulang, lokasi, foto, hasil];
                 });
 
                 renderLogTable(rawLogData);
@@ -1316,7 +1342,8 @@
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                    if (idx > 0 && colIdx === 6 && cellContent !== '') {
+                    // Kolom 7 (index 7): Hasil
+                    if (idx > 0 && colIdx === 7 && cellContent !== '') {
                         let upper = cellContent.toUpperCase();
                         let statusClass = "badge-ket-sukses";
                         if (upper.includes("TERLAMBAT") || upper.includes("TLT") || upper.includes("❌")) {
@@ -1325,11 +1352,13 @@
                         cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
                     }
 
-                    if (idx > 0 && colIdx === 5 && cellContent !== '') {
+                    // Kolom 6 (index 6): FOTO SELFI
+                    if (idx > 0 && colIdx === 6 && cellContent !== '') {
                         let namaKaryawanBaris = String(row[1] || "").replace(/<[^>]*>/g, "").trim();
-                        let jamMasukBaris = String(row[2] || "").replace(/<[^>]*>/g, "").trim();
-                        let lokasiBaris = String(row[4] || "").replace(/<[^>]*>/g, "").trim();
-                        let captionText = `${namaKaryawanBaris} • Masuk ${jamMasukBaris} • ${lokasiBaris}`;
+                        let tglBaris = String(row[2] || "").replace(/<[^>]*>/g, "").trim();
+                        let jamMasukBaris = String(row[3] || "").replace(/<[^>]*>/g, "").trim();
+                        let lokasiBaris = String(row[5] || "").replace(/<[^>]*>/g, "").trim();
+                        let captionText = `${namaKaryawanBaris} • ${tglBaris} • Masuk ${jamMasukBaris} • ${lokasiBaris}`;
 
                         let match = cellContent.match(/[-\w]{25,}/);
                         let imgUrl = match
@@ -1370,9 +1399,13 @@
             let header = rawLogData[0];
             let bodyRows = rawLogData.slice(1);
 
-            let filteredBody = bodyRows.filter(row => {
-                return row.some(cell => String(cell).toLowerCase().includes(keyword));
-            });
+            let filteredBody = bodyRows
+                .filter(row => row.some(cell => String(cell).toLowerCase().includes(keyword)))
+                .map((row, i) => {
+                    let rowCopy = [...row];
+                    rowCopy[0] = i + 1; // Nomor urut ulang 1, 2, 3, ...
+                    return rowCopy;
+                });
 
             renderLogTable([header, ...filteredBody]);
         }
