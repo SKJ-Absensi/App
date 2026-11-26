@@ -380,7 +380,7 @@
         #logContent table.rekap-table th,
         #logContent table.rekap-table td {
             border: 1px solid #252730;
-            padding: 10px 12px;
+            padding: 9px 11px;
             text-align: center;
             color: #e4e4e7;
             vertical-align: middle;
@@ -469,12 +469,49 @@
         .badge-cuti { background: rgba(96, 165, 250, 0.16); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.45); }
         .badge-tlt { background: rgba(251, 146, 60, 0.18); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.45); }
 
+        /* Kapsul tabel Log Harian */
+        .capsule-cell {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 11px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.2;
+            background: #1b1c22;
+            color: #e4e4e7;
+            border: 1px solid #323542;
+            white-space: nowrap;
+        }
+        .capsule-nama {
+            background: rgba(250, 204, 21, 0.13);
+            color: #fde047;
+            border: 1px solid rgba(250, 204, 21, 0.42);
+            font-weight: 700;
+        }
+        .capsule-tgl,
+        .capsule-jam {
+            background: #181920;
+            color: #f4f4f5;
+            border: 1px solid #2e3240;
+            font-variant-numeric: tabular-nums;
+        }
+        .capsule-lokasi {
+            background: #161822;
+            color: #e2e8f0;
+            border: 1px solid #2c3142;
+        }
+
         .badge-status-pill {
-            display: inline-block;
-            padding: 5px 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 12px;
             border-radius: 999px;
             font-size: 11px;
             font-weight: 700;
+            line-height: 1.2;
             letter-spacing: 0.2px;
             white-space: nowrap;
         }
@@ -492,6 +529,11 @@
             background: rgba(248, 113, 113, 0.18);
             color: #fca5a5;
             border: 1px solid rgba(248, 113, 113, 0.5);
+        }
+        .badge-ket-menunggu {
+            background: rgba(250, 204, 21, 0.1);
+            color: #e4e4e7;
+            border: 1px solid rgba(250, 204, 21, 0.28);
         }
 
         .footer {
@@ -1288,10 +1330,6 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
-function isTanggalSama(valA, valB) {
-            return formatTanggalSingkat(valA) === formatTanggalSingkat(valB);
-        }
-
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#a1a1aa;'>Memuat log absensi hari ini...</div>";
@@ -1368,17 +1406,29 @@ function isTanggalSama(valA, valB) {
                     let tag = idx === 0 ? 'th' : 'td';
                     let cellContent = cell !== null ? String(cell).trim() : '';
 
-                    // Kolom 7 (index 7): Hasil
-                    if (idx > 0 && colIdx === 7 && cellContent !== '') {
-                        let upper = cellContent.toUpperCase();
-                        let statusClass = "badge-ket-sukses";
-                        if (upper.includes("TERLAMBAT") || upper.includes("TLT") || upper.includes("❌")) {
-                            statusClass = "badge-ket-absen";
+                    if (idx > 0 && cellContent !== '') {
+                        if (colIdx === 1) {
+                            cellContent = `<span class="capsule-cell capsule-nama">${cellContent}</span>`;
+                        } else if (colIdx === 2) {
+                            cellContent = `<span class="capsule-cell capsule-tgl">${cellContent}</span>`;
+                        } else if (colIdx === 3 || colIdx === 4) {
+                            cellContent = `<span class="capsule-cell capsule-jam">${cellContent}</span>`;
+                        } else if (colIdx === 5) {
+                            cellContent = `<span class="capsule-cell capsule-lokasi">${cellContent}</span>`;
+                        } else if (colIdx === 7) {
+                            let upper = cellContent.toUpperCase();
+                            let statusClass = "badge-ket-sukses";
+                            if (cellContent === "-") {
+                                statusClass = "badge-ket-menunggu";
+                            } else if (upper.includes("TERLAMBAT") || upper.includes("TLT")) {
+                                statusClass = "badge-ket-terlambat";
+                            } else if (upper.includes("TIDAK") || upper.includes("❌")) {
+                                statusClass = "badge-ket-absen";
+                            }
+                            cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
                         }
-                        cellContent = `<span class="badge-status-pill ${statusClass}">${cellContent}</span>`;
                     }
 
-                    // Kolom 6 (index 6): FOTO SELFI
                     if (idx > 0 && colIdx === 6 && cellContent !== '') {
                         let namaKaryawanBaris = String(row[1] || "").replace(/<[^>]*>/g, "").trim();
                         let tglBaris = String(row[2] || "").replace(/<[^>]*>/g, "").trim();
@@ -1429,7 +1479,7 @@ function isTanggalSama(valA, valB) {
                 .filter(row => row.some(cell => String(cell).toLowerCase().includes(keyword)))
                 .map((row, i) => {
                     let rowCopy = [...row];
-                    rowCopy[0] = i + 1; // Nomor urut ulang 1, 2, 3, ...
+                    rowCopy[0] = i + 1;
                     return rowCopy;
                 });
 
