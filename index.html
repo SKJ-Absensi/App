@@ -766,8 +766,8 @@
                 const isPulang = String(tipeAbsen || "").toUpperCase() === "PULANG";
 
                 const kalimat = isPulang
-                    ? `Perhatian. Absen pulang ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Terima kasih atas kerja keras Anda hari ini, dan hati-hati di jalan.`
-                    : `Perhatian. Absen masuk ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Selamat bertugas, semoga hari Anda lancar dan berkah.`;
+                    ? `Absen pulang ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Terima kasih atas kerja keras Anda hari ini, dan hati-hati di jalan.`
+                    : `Absen masuk ${sapaanNama}di Nasi Padang SKJ telah berhasil tercatat. Selamat bertugas, semoga hari Anda lancar dan berkah.`;
 
                 window.speechSynthesis.cancel();
                 setTimeout(() => {
@@ -1288,6 +1288,10 @@
             renderJadwalTable([header1, header2, ...filteredBody], "Hasil Pencarian");
         }
 
+function isTanggalSama(valA, valB) {
+            return formatTanggalSingkat(valA) === formatTanggalSingkat(valB);
+        }
+
         function loadLogHarian() {
             const container = document.getElementById('logContent');
             container.innerHTML = "<div style='text-align:center; padding:20px; color:#a1a1aa;'>Memuat log absensi hari ini...</div>";
@@ -1310,21 +1314,43 @@
                     return;
                 }
 
-                // Susunan kolom: [No, Nama Staff, Tanggal, MASUK, PULANG, KETERANGAN, FOTO SELFI, Hasil]
-                rawLogData = originalRows.map((row, index) => {
-                    if (index === 0) {
-                        return ["No", "Nama Staff", "Tanggal", "MASUK", "PULANG", "KETERANGAN", "FOTO SELFI", "Hasil"];
-                    }
-                    let tanggalSingkat = formatTanggalSingkat(row[0]);
-                    let namaStaff = row[2] || "-";
-                    let masuk = row[3] || "-";
-                    let pulang = (row[4] && row[4] !== "") ? row[4] : "-";
-                    let lokasi = row[5] || "-";
-                    let foto = row[6] || "";
-                    let hasil = row[8] || "-";
+                const now = new Date();
+                const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                const todayShort = formatTanggalSingkat(now.toISOString());
+                const yesterdayShort = formatTanggalSingkat(yesterday.toISOString());
 
-                    return [index, namaStaff, tanggalSingkat, masuk, pulang, lokasi, foto, hasil];
-                });
+                const headerRow = ["No", "Nama Staff", "Tanggal", "MASUK", "PULANG", "KETERANGAN", "FOTO SELFI", "Hasil"];
+                const visibleRows = [];
+
+                for (let i = 1; i < originalRows.length; i++) {
+                    const row = originalRows[i];
+                    const tglSingkat = formatTanggalSingkat(row[0]);
+                    const pulangRaw = (row[4] && String(row[4]).trim() !== "") ? String(row[4]).trim() : "-";
+                    const belumPulang = (pulangRaw === "-");
+
+                    const tampilHariIni = (tglSingkat === todayShort);
+                    const tampilKemarinBelumPulang = (tglSingkat === yesterdayShort && belumPulang);
+
+                    if (tampilHariIni || tampilKemarinBelumPulang) {
+                        visibleRows.push([
+                            visibleRows.length + 1,
+                            row[2] || "-",
+                            tglSingkat,
+                            row[3] || "-",
+                            pulangRaw,
+                            row[5] || "-",
+                            row[6] || "",
+                            row[8] || "-"
+                        ]);
+                    }
+                }
+
+                rawLogData = [headerRow, ...visibleRows];
+
+                if (visibleRows.length === 0) {
+                    container.innerHTML = "<div style='text-align:center; padding:20px; color:#a1a1aa;'>Belum ada karyawan yang absen hari ini.</div>";
+                    return;
+                }
 
                 renderLogTable(rawLogData);
             })
